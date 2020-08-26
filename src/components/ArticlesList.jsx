@@ -1,14 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import Avatar from '@material-ui/core/Avatar';
+import ListItem from '@material-ui/core/ListItem';
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import FavoriteOutlinedIcon from '@material-ui/icons/FavoriteOutlined';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 
 import * as CONST from '../CONST';
+import AppProgress from './UI/AppProgress';
 import { appStoreUpdateStore } from '../store/appStore/actions';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    position: 'relative',
+    minHeight: theme.spacing(9),
+  },
+}));
 
 const ArticlesList = () => {
 
+  const classes = useStyles();
   const dispatch = useDispatch();
   const [articles, setArticles] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const articleStore = useSelector(state => state.appStore[CONST.ARTICLES_STORE]);
 
   useEffect(() => {
@@ -35,32 +57,41 @@ const ArticlesList = () => {
     dispatch(appStoreUpdateStore({ storeName: CONST.ARTICLES_STORE, mapper }));
   };
 
-  const handleOpen = e => {
+  const handleOpen = (e, url) => {
     e.preventDefault();
     e.stopPropagation();
-
-    const { href: url } = e.target;
 
     window.open(url, '_blank');
   };
 
   const renderArticles = () => {
-    return articles.map(({ id, like, data: { title, url } }) => (
-      <div key={id}>
-        <button onClick={e => handleLike(e, id)}>
-          {!like && 'Like'}
-          {like && 'Dislike'}
-        </button>
-        <button onClick={e => handleDelete(e, id)} children="Delete" />
-        <a href={url} onClick={handleOpen} children={title} />
-      </div>
+    return articles.map(({ id, like, data: { title = 'no title', url = 'no url', author = 'no author' } }) => (
+      <ListItem key={id} button onClick={e => handleOpen(e, url)}>
+        <ListItemAvatar children={<Avatar children={<DescriptionOutlinedIcon />} />} />
+
+        <ListItemText primary={title} secondary={author} />
+
+        <ListItemSecondaryAction>
+          <IconButton edge="start" color="secondary" onClick={e => handleLike(e, id)}>
+            {!like && <FavoriteBorderOutlinedIcon />}
+            {like && <FavoriteOutlinedIcon />}
+          </IconButton>
+
+          <IconButton edge="end" onClick={e => handleDelete(e, id)} children={<DeleteOutlinedIcon />} />
+        </ListItemSecondaryAction>
+      </ListItem>
     ));
   };
 
-  return !!articles && (
-    <div>
-      {renderArticles()}
-    </div>
+  return (
+    <Grid container className={classes.root}>
+      {isLoading && <AppProgress />}
+      <Grid item xs={12}>
+        <List component="nav">
+          {!!articles && renderArticles()}
+        </List>
+      </Grid>
+    </Grid>
   );
 };
 

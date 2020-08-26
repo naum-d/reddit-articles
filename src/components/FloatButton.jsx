@@ -1,6 +1,8 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 import * as CONST from '../CONST';
 import { getUniqueKey, mathRandom } from '../helpers';
@@ -24,9 +26,9 @@ const FloatButton = props => {
   };
 
   return (
-    <div>
-      <button onClick={handleClick} children={label} />
-    </div>
+    <Grid item xs={12}>
+      <Button color="primary" variant="contained" onClick={handleClick} children={label} />
+    </Grid>
   );
 };
 
