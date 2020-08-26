@@ -65,7 +65,7 @@ const ArticlesList = () => {
   };
 
   const renderArticles = () => {
-    return articles.map(({ id, like, data: { title = 'no title', url = 'no url', author = 'no author' } }) => (
+    return articles.map(({ id, like, data: { title, url, author } }) => (
       <ListItem key={id} button onClick={e => handleOpen(e, url)}>
         <ListItemAvatar children={<Avatar children={<DescriptionOutlinedIcon />} />} />
 
