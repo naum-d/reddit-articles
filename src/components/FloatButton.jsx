@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import * as PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,6 +11,9 @@ import { getUniqueKey, mathRandom } from '../helpers';
 import { appStoreMakeRequest } from '../store/appStore/actions';
 
 const useStyles = makeStyles(() => ({
+  root: {
+    overflowX: 'hidden',
+  },
   container: {
     width: '100%',
     animation: `$containerMove 20000ms infinite`,
@@ -41,10 +44,11 @@ const FloatButton = props => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [isHover, setIsHover] = useState(false);
+  const historyStore = useSelector(state => state.appStore[CONST.HISTORY_STORE]);
 
-  const mapper = (newData, oldData) => {
+  const mapper = newData => {
     let article = { id: getUniqueKey(), like: false, ...newData[mathRandom(0, newData.length - 1)] };
-    return [article, ...(oldData || [])];
+    return [article, ...historyStore.data['current']];
   };
 
   const handleClick = e => {
