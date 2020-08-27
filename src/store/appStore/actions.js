@@ -30,16 +30,3 @@ export const appStoreMakeRequest = params => {
     payload: { ...params },
   };
 };
-
-// export const appStoreLoadData = ({ storeName, dataSource, dataType, mapper }) => {
-//   return dispatch =>
-//     new Promise((resolve, reject) => {
-//       dispatch(appStoreCreateStore({ storeName, data: { dataSource, data: dataType || [] } }));
-//       dispatch(appStoreMakeRequest({ storeName, dataSource, method: 'GET' }))
-//         .then(resp => {
-//           dispatch(appStoreUpdateStore({ storeName, data: { data: !!mapper ? mapper(resp) : resp } }));
-//           resolve(resp);
-//         })
-//         .catch(error => reject(error));
-//     });
-// };
