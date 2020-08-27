@@ -1,4 +1,4 @@
-## [DEMO](http://188.225.9.181/).
+## [DEMO](http://188.225.9.181/) | http://naum-d.ru/
 
 ## Available Scripts
 
